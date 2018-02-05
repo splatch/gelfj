@@ -18,7 +18,7 @@
     <groupId>org.graylog2</groupId>
     <artifactId>gelfj</artifactId>
     <version>1.1.17-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <name>gelfj</name>
     <description>GELF implementation in Java and log4j appender without any dependencies.</description>
     <url>https://github.com/t0xa/gelfj</url>
@@ -46,6 +46,7 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.rabbitmq</groupId>
@@ -121,6 +122,25 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>3.5.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Implementation-Title>GELF Java Implementation</Implementation-Title>
+                        <Implementation-Version>${project.version}</Implementation-Version>
+                        <Import-Package>!*</Import-Package>
+                        <Export-Package>org.graylog2.*</Export-Package>
+                        <Bundle-Name>${project.groupId}</Bundle-Name>
+                        <Bundle-SymbolicName>${project.groupId}</Bundle-SymbolicName>
+                        <Embed-Dependency>*;scope=compile|runtime;inline=true</Embed-Dependency>
+                        <Fragment-Host>org.ops4j.pax.logging.pax-logging-log4j2</Fragment-Host>
+                        <_nouses>true</_nouses>
+                    </instructions>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
